@@ -4,7 +4,6 @@ import { Product } from '@/types/product';
 import { useProductsStore } from '@/store/useProductsStore';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { useState } from 'react';
 
 interface ProductCardProps {
   product: Product;
@@ -34,7 +33,6 @@ export default function ProductCard({ product }: ProductCardProps) {
     }
   };
 
-  // Обрезаем описание для одинаковой высоты карточек
   const truncatedDescription =
     product.description.length > 100
       ? product.description.substring(0, 100) + '...'
