@@ -3,7 +3,6 @@ import { Product, ProductsState, FilterType, ProductFormData } from '@/types/pro
 import axios from 'axios';
 
 interface ProductsStore extends ProductsState {
-  // Actions
   fetchProducts: () => Promise<void>;
   toggleFavorite: (id: number | string) => void;
   deleteProduct: (id: number | string) => void;
@@ -19,7 +18,6 @@ interface ProductsStore extends ProductsState {
 }
 
 export const useProductsStore = create<ProductsStore>((set, get) => ({
-  // Initial state
   products: [],
   favorites: new Set(),
   filter: 'all',
@@ -30,7 +28,6 @@ export const useProductsStore = create<ProductsStore>((set, get) => ({
   loading: false,
   error: null,
 
-  // Fetch products from API
   fetchProducts: async () => {
     set({ loading: true, error: null });
     try {
@@ -44,7 +41,6 @@ export const useProductsStore = create<ProductsStore>((set, get) => ({
     }
   },
 
-  // Toggle favorite
   toggleFavorite: (id) => {
     set((state) => {
       const newFavorites = new Set(state.favorites);
@@ -57,7 +53,6 @@ export const useProductsStore = create<ProductsStore>((set, get) => ({
     });
   },
 
-  // Delete product
   deleteProduct: (id) => {
     set((state) => ({
       products: state.products.filter((p) => p.id !== id),
@@ -65,27 +60,22 @@ export const useProductsStore = create<ProductsStore>((set, get) => ({
     }));
   },
 
-  // Set filter
   setFilter: (filter) => {
     set({ filter, currentPage: 1 });
   },
 
-  // Set search query
   setSearchQuery: (query) => {
     set({ searchQuery: query, currentPage: 1 });
   },
 
-  // Set category filter
   setCategoryFilter: (category) => {
     set({ categoryFilter: category, currentPage: 1 });
   },
 
-  // Set current page
   setCurrentPage: (page) => {
     set({ currentPage: page });
   },
 
-  // Add new product
   addProduct: (productData) => {
     const newProduct: Product = {
       ...productData,
@@ -97,7 +87,6 @@ export const useProductsStore = create<ProductsStore>((set, get) => ({
     }));
   },
 
-  // Update product
   updateProduct: (id, productData) => {
     set((state) => ({
       products: state.products.map((p) =>
@@ -106,18 +95,15 @@ export const useProductsStore = create<ProductsStore>((set, get) => ({
     }));
   },
 
-  // Get filtered products
   getFilteredProducts: () => {
     const { products, filter, favorites, searchQuery, categoryFilter } = get();
     
     let filtered = products;
 
-    // Filter by favorites
     if (filter === 'favorites') {
       filtered = filtered.filter((p) => favorites.has(p.id));
     }
 
-    // Filter by search query
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(
@@ -128,7 +114,6 @@ export const useProductsStore = create<ProductsStore>((set, get) => ({
       );
     }
 
-    // Filter by category
     if (categoryFilter) {
       filtered = filtered.filter((p) => p.category === categoryFilter);
     }
@@ -136,7 +121,6 @@ export const useProductsStore = create<ProductsStore>((set, get) => ({
     return filtered;
   },
 
-  // Get paginated products
   getPaginatedProducts: () => {
     const filtered = get().getFilteredProducts();
     const { currentPage, itemsPerPage } = get();
@@ -145,7 +129,6 @@ export const useProductsStore = create<ProductsStore>((set, get) => ({
     return filtered.slice(startIndex, endIndex);
   },
 
-  // Get total pages
   getTotalPages: () => {
     const filtered = get().getFilteredProducts();
     const { itemsPerPage } = get();
