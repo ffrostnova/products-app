@@ -25,22 +25,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-          cache: 'npm'
 
       - name: Install dependencies
         run: npm install
 
       - name: Build
         run: npm run build
-
-      - name: Check build output
-        run: |
-          if [ ! -d "out" ]; then
-            echo "Error: out directory not found"
-            exit 1
-          fi
-          echo "Build output found:"
-          ls -la out/ | head -20
+        continue-on-error: false
 
       - name: Setup Pages
         uses: actions/configure-pages@v3
@@ -53,5 +44,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
