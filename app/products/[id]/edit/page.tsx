@@ -6,6 +6,18 @@ import { useProductsStore } from '@/store/useProductsStore';
 import { ProductFormData } from '@/types/product';
 import Link from 'next/link';
 
+export async function generateStaticParams() {
+  try {
+    const response = await fetch('https://fakestoreapi.com/products');
+    const products = await response.json();
+    return products.map((product: { id: number | string }) => ({
+      id: product.id.toString(),
+    }));
+  } catch (error) {
+    return [];
+  }
+}
+
 export default function EditProductPage() {
   const router = useRouter();
   const params = useParams();
