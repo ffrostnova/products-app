@@ -54,10 +54,14 @@ export const useProductsStore = create<ProductsStore>((set, get) => ({
   },
 
   deleteProduct: (id) => {
-    set((state) => ({
-      products: state.products.filter((p) => p.id !== id),
-      favorites: new Set([...state.favorites].filter((fid) => fid !== id)),
-    }));
+    set((state) => {
+      const newFavorites = new Set(state.favorites);
+      newFavorites.delete(id);
+      return {
+        products: state.products.filter((p) => p.id !== id),
+        favorites: newFavorites,
+      };
+    });
   },
 
   setFilter: (filter) => {
