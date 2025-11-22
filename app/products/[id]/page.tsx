@@ -1,21 +1,13 @@
 import ProductDetailClient from './ProductDetailClient';
-import axios from 'axios';
 
-export async function generateStaticParams() {
-  try {
-    const response = await axios.get('https://fakestoreapi.com/products');
-    const products = response.data;
-    
-    if (!Array.isArray(products)) {
-      return [];
-    }
-    
-    return products.map((product: { id: number | string }) => ({
-      id: product.id.toString(),
-    }));
-  } catch (error) {
-    return [];
-  }
+export function generateStaticParams() {
+  // Генерируем статические параметры для первых 20 продуктов
+  // (Fake Store API обычно возвращает около 20 продуктов)
+  const ids = Array.from({ length: 20 }, (_, i) => ({
+    id: (i + 1).toString(),
+  }));
+  
+  return ids;
 }
 
 export default function ProductDetailPage() {
