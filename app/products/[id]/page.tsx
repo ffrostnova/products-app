@@ -1,16 +1,10 @@
 import ProductDetailClient from './ProductDetailClient';
+import axios from 'axios';
 
 export async function generateStaticParams() {
   try {
-    const response = await fetch('https://fakestoreapi.com/products', {
-      cache: 'force-cache',
-    });
-    
-    if (!response.ok) {
-      return [];
-    }
-    
-    const products = await response.json();
+    const response = await axios.get('https://fakestoreapi.com/products');
+    const products = response.data;
     
     if (!Array.isArray(products)) {
       return [];
